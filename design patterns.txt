@@ -1,0 +1,151 @@
+---design patterns---
+
+//singelton -creational ptterns
+public class Singleton {
+ private static final Singleton instance = new Singleton();
+ 
+ // Private constructor ensures that the class cannot be instantiated from outside
+ private Singleton() {}
+ public static Singleton getInstance() {
+ return instance;
+ }
+}
+
+//factory method 
+//t provides an interface for creating objects but allows subclasses to alter the type of objects that will be created.
+public abstract class Creator {
+ public abstract Product factoryMethod();
+ public void someOperation() {
+ Product product = factoryMethod();
+ // ... use the product
+ }
+}
+public class ConcreteCreatorA extends Creator {
+ @Override
+ public Product factoryMethod() {
+ return new ConcreteProductA();
+ }
+}
+public class ConcreteCreatorB extends Creator {
+ @Override
+ public Product factoryMethod() {
+ return new ConcreteProductB();
+ }
+}
+public interface Product {}
+public class ConcreteProductA implements Product {}
+public class ConcreteProductB implements Product {}
+
+
+---Structural Patterns---
+//bridge between two incompatible interfaces
+//old system get data as xml format and new system get data as json foormat, this two  incompatible interfaces we can connect through adptor
+---early system---
+class OldSystem {
+ public String getEmployeeDataInXML() {
+ // For simplicity, returning XML string directly, in real case it might be read from a file or database.
+ return "<employees><employee><id>1</id><name>John Doe</name></employee></employees>";
+ }
+}
+class NewSystem {
+ public void processEmployeeDataInJSON(String jsonData) {
+ System.out.println("Processing employee data in JSON format: " + jsonData);
+ }
+}
+
+---new system---
+import org.json.JSONObject;
+import org.json.XML;
+class Adapter {
+ private OldSystem oldSystem;
+ public Adapter(OldSystem oldSystem) {
+ this.oldSystem = oldSystem;
+ }
+ public String getEmployeeDataInJSON() {
+ String xmlData = oldSystem.getEmployeeDataInXML();
+ JSONObject jsonData = XML.toJSONObject(xmlData);
+ return jsonData.toString();
+ }
+}
+public class Client {
+ public static void main(String[] args) {
+ OldSystem oldSystem = new OldSystem();
+ Adapter adapter = new Adapter(oldSystem);
+ NewSystem newSystem = new NewSystem();
+ String jsonData = adapter.getEmployeeDataInJSON();
+ newSystem.processEmployeeDataInJSON(jsonData);
+ }
+}
+
+
+---behavioral patterns---
+//observer
+//concerned with the assignment of responsibilities between objects and how they communicate
+
+import java.util.ArrayList;
+import java.util.List;
+public class WeatherStation {
+ private List<WeatherObserver> observers;
+ private double temperature;
+ private double humidity;
+ public WeatherStation() {
+ observers = new ArrayList<>();
+ }
+ public void addObserver(WeatherObserver observer) {
+ observers.add(observer);
+ }
+ public void removeObserver(WeatherObserver observer) {
+ observers.remove(observer);
+ }
+ public void notifyObservers() {
+ for (WeatherObserver observer : observers) {
+ observer.update(temperature, humidity);
+ }
+ }
+ public void setMeasurements(double temperature, double 
+humidity) {
+ this.temperature = temperature;
+ this.humidity = humidity;
+ notifyObservers();
+ }
+}
+
+
+//conect two clases
+public interface WeatherObserver {
+ void update(double temperature, double humidity);
+}
+public class CurrentConditionsDisplay implements 
+WeatherObserver {
+ @Override
+ public void update(double temperature, double humidity) {
+ System.out.println("Current conditions: " + temperature + "F 
+degrees and " + humidity + "% humidity");
+ }
+}
+public class ForecastDisplay implements WeatherObserver {
+ @Override
+ public void update(double temperature, double humidity) {
+ System.out.println("Forecast: Conditions will likely " + 
+(humidity > 60 ? "worsen" : "improve"));
+ }
+}
+public class WeatherStationApp {
+ public static void main(String[] args) {
+ WeatherStation weatherStation = new WeatherStation();
+ CurrentConditionsDisplay currentDisplay = new 
+CurrentConditionsDisplay();
+ ForecastDisplay forecastDisplay = new ForecastDisplay();
+ weatherStation.addObserver(currentDisplay);
+ weatherStation.addObserver(forecastDisplay);
+ System.out.println("Weather update 1:");
+ weatherStation.setMeasurements(28.5, 65.0);
+ 
+ System.out.println("\nWeather update 2:");
+ weatherStation.setMeasurements(30.0, 55.0);
+ }
+}
+
+
+
+

@@ -1,0 +1,195 @@
+//single responsibility 
+//one class should have only one reasone to change
+
+class custome{
+	private string userName;
+	private string email;
+
+	public customer(string userName, string email){
+		this.userNmae =userNmae;
+		this.email=eamil;
+}
+
+class customeSaveToDatabase{
+	public voidsaveToDatabase(customer){
+		//function to save in database
+}
+
+---------------------------------------------------------
+
+//open close principle
+//open for extention closed for modification
+
+--early class---
+class rectangle(){
+//function to draw rectangle
+}
+
+class circle(){
+//function to draw circle
+}
+
+--create interface---
+
+interface shape{
+	draw ();
+}
+
+
+--modification---
+//rectangle
+class rectangle implement shape {
+	@override
+	public void draw(){
+//function to draw rectangle
+}
+
+//circle
+class circle implement shape{
+	@override
+	public void draw (){
+//function to draw circle
+}
+
+//traingle
+class trangle implement shape{
+	@override
+	public void draw(){
+//function to draw traigle
+}
+
+--------------------------------------------------------
+//likshov substitution principle
+//superclass should be replace with object of subclases without affectiong to correctness of the programme
+
+--early class---
+class rectangle(){
+//function to draw rectangle
+}
+
+class circle(){
+//function to draw circle
+}
+
+
+--create interface---
+
+interface shape{
+	draw ();
+}
+
+
+--modification---
+//rectangle
+class rectangle implement shape {
+	@override
+	public void draw(){
+//function to draw rectangle
+}
+
+//circle
+class circle implement shape{
+	@override
+	public void draw (){
+//function to draw circle
+}
+
+--------------------------------------------------------
+//interface seggergation principle
+//client should not depend on interface they not use
+
+--early code---
+
+interface document(){
+void print();
+voidscan();
+}
+
+class printer implement document{
+	@Override
+ 	public void print() {
+ 	// Print the document
+ 	}
+
+ 	@Override
+ 	public void scan() {
+ 	// Not applicable for
+}
+}
+
+class Photocopier implements Document {
+ 	@Override
+	public void print() {
+	// Print the document
+}
+ 	@Override
+ 	public void scan() {
+ 	// Scan the document
+}
+}
+
+--corectness ---
+interface Printer {
+ void print();
+}
+interface Scanner {
+ void scan();
+}
+
+class SimplePrinter implements Printer {
+ @Override
+ public void print() {
+ // Print the document
+ }
+}
+
+class Photocopier implements Scanner {
+ @Override
+ public void scan() {
+ // Scan the document
+ }
+}
+
+
+--------------------------------------------------------
+//Dependency Inversion Principle
+//high-level modules should not depend on low-level modules; both should depend on abstractions
+
+class NotificationService {
+ EmailSender emailSender = new EmailSender();
+ 
+ void sendNotification(String message) {
+ // Use emailSender to send notifications
+ }
+}
+class EmailSender {
+ void sendEmail(String message) {
+ // Code to send email
+ }
+}
+
+--corectness---
+interface Notifier {
+ void send(String message);
+}
+class NotificationService {
+ private Notifier notifier;
+ public NotificationService(Notifier notifier) {
+ this.notifier = notifier;
+ }
+ 
+ void sendNotification(String message) {
+ notifier.send(message);
+ }
+}
+class EmailSender implements Notifier {
+ @Override
+ public void send(String message) {
+ // Code to send email
+ }
+}
+
+
+
+
+
